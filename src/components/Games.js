@@ -16,6 +16,7 @@ import GameCard from "./GameCard";
 export default function Games() {
   const [showSearch, setShowSearch] = useState(false);
   const [selectedSlide, setSelectedSlide] = useState(null);
+  const [search, setSearch] = useState("");
 
   const toggleSearch = () => {
     setShowSearch(!showSearch);
@@ -24,6 +25,17 @@ export default function Games() {
   const handleSlideClick = (index) => {
     setSelectedSlide(index);
   };
+
+  const filteredGames = games.filter((game) => {
+    const matchesCategory =
+      selectedSlide === null ||
+      game.category === categories[selectedSlide]?.value;
+    const matchesSearch = game.name
+      .toLowerCase()
+      .includes(search.toLowerCase());
+
+    return matchesCategory || matchesSearch;
+  });
 
   return (
     <>
@@ -87,7 +99,12 @@ export default function Games() {
                 width={20}
               />
             </InputGroup.Text>
-            <FormControl placeholder="Search games" aria-label="Search games" />
+            <FormControl
+              placeholder="Search games"
+              aria-label="Search games"
+              onChange={(e) => setSearch(e.target.value)}
+              value={search}
+            />
             <Button className="me-3">
               <img src="./SVG ICONS/game.svg" />
             </Button>
@@ -96,8 +113,7 @@ export default function Games() {
       )}
       <Container className="p-3">
         <Row>
-          {games.map((game) => {
-            console.log(game);
+          {filteredGames.map((game) => {
             return (
               <GameCard
                 name={game.name}
