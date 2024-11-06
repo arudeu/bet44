@@ -29,12 +29,13 @@ export default function Games() {
   const filteredGames = games.filter((game) => {
     const matchesCategory =
       selectedSlide === null ||
-      game.category === categories[selectedSlide]?.value;
+      game.category === categories[selectedSlide]?.value ||
+      categories[selectedSlide]?.value === "";
     const matchesSearch = game.name
       .toLowerCase()
       .includes(search.toLowerCase());
 
-    return matchesCategory || matchesSearch;
+    return matchesCategory && matchesSearch;
   });
 
   return (
